@@ -43,7 +43,7 @@ class SearchViewController: UIViewController {
             return
         }
         
-        let folloerListVC = FollowerListViewController()
+        let folloerListVC = FollowerListVC()
         folloerListVC.username = textField.text
         folloerListVC.title = textField.text
         navigationController?.pushViewController(folloerListVC, animated: true)

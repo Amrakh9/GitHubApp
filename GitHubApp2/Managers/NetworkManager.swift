@@ -4,7 +4,6 @@
 //
 //  Created by Amrah on 21.03.24.
 //
-// MARK: Videoda 3:20:00 -> 3:47:00  hissesine yeniden bax tam anlaya bilmeyin uchun
 import Foundation
 // THIS IS SINGLETON
 class NetworkManager {
