@@ -36,16 +36,6 @@ class FollowerListVC: UIViewController {
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.prefersLargeTitles = true
     }
-    
-    
-    func configureCollectionView() {
-        let layout = UICollectionViewFlowLayout()
-        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createThreeColumnFlowLayout())
-        view.addSubview(collectionView)
-        collectionView.backgroundColor = .systemBackground
-        collectionView.register(FollowerCollectionViewCell.self, forCellWithReuseIdentifier: FollowerCollectionViewCell.reuseID)
-    }
-    
     func createThreeColumnFlowLayout() -> UICollectionViewFlowLayout{
         let width = view.bounds.width
         let padding: CGFloat = 12
@@ -57,8 +47,19 @@ class FollowerListVC: UIViewController {
         flowLayout.sectionInset = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         flowLayout.itemSize = CGSize(width: itemWidth, height: itemWidth + 40)
         
-        return UICollectionViewFlowLayout()
+        return flowLayout
     }
+    
+
+    func configureCollectionView() {
+        let layout = createThreeColumnFlowLayout()
+        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
+        view.addSubview(collectionView)
+        collectionView.backgroundColor = .systemBackground
+        collectionView.register(FollowerCollectionViewCell.self, forCellWithReuseIdentifier: FollowerCollectionViewCell.reuseID)
+        collectionView.reloadData() // Reload data after setting layout
+    }
+    
     
     func getFollowers() {
         NetworkManager.shared.getFollowers(for: username, page: 1) { [weak self] result in

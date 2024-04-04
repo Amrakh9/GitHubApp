@@ -28,25 +28,40 @@ class FollowerCollectionViewCell: UICollectionViewCell {
     
     func set(follower: Follower){
         usernameLabel.text = follower.login
+        
+        
+        // Fetch image data
+            URLSession.shared.dataTask(with: URL(string: follower.avatarUrl)!) { data, response, error in
+                
+                if let data = data, let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        self.avatarImage.image = image
+                    }
+                } else {
+                    // Error
+                }
+                
+            }.resume()
     }
     
     private func configure(){
         addSubview(avatarImage)
         addSubview(usernameLabel)
         
-        let padding: CGFloat = 8
+        let padding: CGFloat = 4
     
         
         NSLayoutConstraint.activate([
-            avatarImage.topAnchor.constraint(equalTo: topAnchor, constant: padding),
-            avatarImage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: padding),
-            avatarImage.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -padding),
-            avatarImage.heightAnchor.constraint(equalTo: avatarImage.widthAnchor),
-            
-            usernameLabel.topAnchor.constraint(equalTo: avatarImage.bottomAnchor, constant: 12),
-            usernameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: padding),
-            usernameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -padding),
-            usernameLabel.heightAnchor.constraint(equalToConstant: 20)
-        ])
+                    avatarImage.topAnchor.constraint(equalTo: topAnchor, constant: padding),
+                    avatarImage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: padding),
+                    avatarImage.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -padding),
+                    avatarImage.heightAnchor.constraint(equalTo: avatarImage.widthAnchor),
+                    
+
+                    usernameLabel.topAnchor.constraint(equalTo: avatarImage.bottomAnchor, constant: 12),
+                    usernameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: padding),
+                    usernameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -padding),
+                    usernameLabel.heightAnchor.constraint(equalToConstant: 20)
+                ])
     }
 }
