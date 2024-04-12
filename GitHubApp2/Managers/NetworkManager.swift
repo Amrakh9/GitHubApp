@@ -5,11 +5,14 @@
 //  Created by Amrah on 21.03.24.
 //
 import Foundation
+import UIKit
 // THIS IS SINGLETON
 class NetworkManager {
-    static let shared = NetworkManager()
+    static let shared   = NetworkManager()
     
-    let baseURL = "https://api.github.com/users/"
+    private let baseURL = "https://api.github.com/users/"
+    let cache           = NSCache<NSString, UIImage>()
+    
     
     private init() {}
     

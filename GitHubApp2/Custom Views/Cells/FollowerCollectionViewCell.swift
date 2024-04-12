@@ -28,20 +28,20 @@ class FollowerCollectionViewCell: UICollectionViewCell {
     
     func set(follower: Follower){
         usernameLabel.text = follower.login
+        avatarImage.downloadImage(from: follower.avatarUrl)
         
-        
-        // Fetch image data
-            URLSession.shared.dataTask(with: URL(string: follower.avatarUrl)!) { data, response, error in
-                
-                if let data = data, let image = UIImage(data: data) {
-                    DispatchQueue.main.async {
-                        self.avatarImage.image = image
-                    }
-                } else {
-                    // Error
-                }
-                
-            }.resume()
+//        // Fetch image data
+//            URLSession.shared.dataTask(with: URL(string: follower.avatarUrl)!) { data, response, error in
+//                
+//                if let data = data, let image = UIImage(data: data) {
+//                    DispatchQueue.main.async {
+//                        self.avatarImage.image = image
+//                    }
+//                } else {
+//                    // Error
+//                }
+//                
+//            }.resume()
     }
     
     private func configure(){
