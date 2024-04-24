@@ -49,20 +49,6 @@ class SearchViewController: UIViewController {
         navigationController?.pushViewController(folloerListVC, animated: true)
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     func configureLogoImageView() {
         view.addSubview(logoImageView)
         logoImageView.translatesAutoresizingMaskIntoConstraints = false

@@ -12,20 +12,26 @@ class UserInfoVC: UIViewController {
     let headerView  = UIView()
     let itemView1 = UIView()
     let itemView2 = UIView()
+    var itemViews: [UIView] = []
 
     var username: String!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        configureViewController()
+        layoutUI()
+        getUserInfo()
+    }
+    
+    func configureViewController(){
         view.backgroundColor = .systemBackground
-        itemView1.backgroundColor = .systemRed
-        itemView2.backgroundColor = .systemBlue
+        
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismssVC))
         navigationItem.rightBarButtonItem = doneButton
         
-        layoutUI()
-        
+    }
+    
+    func getUserInfo(){
         NetworkManager.shared.getUserInfo(for: username) { [weak self] result in
             guard let self = self else { return }
             
@@ -33,6 +39,8 @@ class UserInfoVC: UIViewController {
             case .success(let user):
                 DispatchQueue.main.async {
                     self.add(childVC: GFUserInfoHeaderVC(user: user), to: self.headerView)
+                    self.add(childVC: GFRepoItemVC(user: user), to: self.itemView1)
+                    self.add(childVC: GFFollowerItemVC(user: user), to: self.itemView2)
                 }
                 
             case .failure(let error):
@@ -41,32 +49,30 @@ class UserInfoVC: UIViewController {
         }
     }
     
-    
     func layoutUI() {
-        view.addSubview(headerView)
-        view.addSubview(itemView1)
-        view.addSubview(itemView2)
-        
-        headerView.translatesAutoresizingMaskIntoConstraints = false
-        itemView1.translatesAutoresizingMaskIntoConstraints = false
-        itemView2.translatesAutoresizingMaskIntoConstraints = false
-        
         let padding: CGFloat = 20
         let itemHeight: CGFloat = 140
+        
+        itemViews = [headerView, itemView1, itemView2]
+        for itemView in itemViews {
+            view.addSubview(itemView)
+            itemView.translatesAutoresizingMaskIntoConstraints = false
+            
+            NSLayoutConstraint.activate([
+                itemView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
+                itemView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding)
+            ])
+        }
+        
+        
         NSLayoutConstraint.activate([
             headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             headerView.heightAnchor.constraint(equalToConstant: 180),
             
             itemView1.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: padding),
-            itemView1.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
-            itemView1.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
             itemView1.heightAnchor.constraint(equalToConstant: itemHeight),
             
             itemView2.topAnchor.constraint(equalTo: itemView1.bottomAnchor, constant: padding),
-            itemView2.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
-            itemView2.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
             itemView2.heightAnchor.constraint(equalToConstant: itemHeight)
         ])
     }
