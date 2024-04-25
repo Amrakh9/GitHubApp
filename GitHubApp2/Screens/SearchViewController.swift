@@ -65,7 +65,7 @@ class SearchViewController: UIViewController {
     
     func configureTextField() {
         view.addSubview(textField)
-        textField.delegate = self
+        //textField.delegate = self
         NSLayoutConstraint.activate([
             textField.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 48),
             textField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
@@ -87,10 +87,3 @@ class SearchViewController: UIViewController {
     }
 }
 
-extension SearchViewController: UITextFieldDelegate{
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        pushFollowerListVC()
-        return true
-    }
-    
-}

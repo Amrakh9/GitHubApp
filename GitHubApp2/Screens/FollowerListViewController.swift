@@ -7,6 +7,12 @@
 // 4:39:02
 import UIKit
 
+
+protocol FollowerListVCDelegate: AnyObject {
+    func didRequestFollowers(for username: String)
+}
+
+
 class FollowerListVC: UIViewController {
     
     enum Section { case main }
@@ -40,9 +46,12 @@ class FollowerListVC: UIViewController {
     func configureViewController() {
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.prefersLargeTitles = true
+        
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped))
+        navigationItem.rightBarButtonItem = addButton
     }
     
-
+    
     func configureCollectionView() {
         let layout = UIHelper.createThreeColumnFlowLayout(in: view)
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
@@ -113,6 +122,7 @@ class FollowerListVC: UIViewController {
         DispatchQueue.main.async { self.dataSource.apply(snapshot, animatingDifferences: true) }
         
     }
+    @objc func addButtonTapped() {}
 }
 //Pagination
 extension FollowerListVC: UICollectionViewDelegate{
@@ -134,9 +144,11 @@ extension FollowerListVC: UICollectionViewDelegate{
         let activeArray     = isSearching ? filteredFollowers : followers
         let follower        = activeArray[indexPath.item]
         
+        let destVC          = UserInfoVC()
+        destVC.username     = follower.login
         let userInfoVC      = UserInfoVC()
         userInfoVC.username = follower.login
-        
+        userInfoVC.delegate = self
         let navController   = UINavigationController(rootViewController: userInfoVC)
         present(navController, animated: true)
         
@@ -161,3 +173,19 @@ extension FollowerListVC: UISearchResultsUpdating, UISearchBarDelegate {
         updateData(on: followers)
     }
 }
+
+
+
+extension FollowerListVC: FollowerListVCDelegate {
+    
+    func didRequestFollowers(for username: String) {
+        self.username   = username
+        title           = username
+        page            = 1
+        followers.removeAll()
+        filteredFollowers.removeAll()
+        collectionView.setContentOffset(.zero, animated: true)
+        getFollowers(username: username, page: page)
+    }
+}
+
